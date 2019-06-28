@@ -15,29 +15,61 @@ $(document).ready(function() {
 
   let busqueda = $('#checkPersonalizada')
   let active = false;
+
+  //Active and desactive
   busqueda.on('change', (e) => {
       if (this.customSearch == false) {
         this.customSearch = true
         active = false;
       } else {
         active = true;
-        this.customSearch = false
+        this.customSearch = false;
       }
       $('#personalizada').toggleClass('invisible')
   })
 
-  let filter = function (custom) {
+  //Request
+  var filter = function () {
     $.ajax({
-      url: 'http://localhost:3000/hola',
-      dataType: "json",
-      cache: false,
-      contentType: false,
-      processData: false,
-      crossDomain:true,
-      data: custom,
-      type: 'GET',
+      url: '/hola',
+      data: {personalizada:active},
+      type: 'POST',
       success: function(data){
-        console.log(data);
+        for (var i = 0; i < data.length; i++) {
+          $('.lista').append(
+            `<div class="card horizontal">
+              <div class="card-image">
+                <img src="img/home.jpg">
+              </div>
+              <div class="card-stacked">
+                <div class="card-content">
+                  <div>
+                    <b>${data[i].Direccion}</b><p></p>
+                  </div>
+                  <div>
+                    <b>${data[i].Ciudad}</b><p></p>
+                  </div>
+                  <div>
+                    <b>${data[i].Telefono}</b><p></p>
+                  </div>
+                  <div>
+                    <b>${data[i].Codigo_Postal}</b><p></p>
+                  </div>
+                  <div>
+                    <b>${data[i].Precio}</b><p></p>
+                  </div>
+                  <div>
+                    <b>${data[i].Tipo}</b><p></p>
+                  </div>
+                </div>
+                <div class="card-action right-align">
+                  <a href="#">Ver más</a>
+                </div>
+              </div>
+            </div>`
+          )
+        }
+
       },
       error: function(){
         console.log("error al enviar los datos");
@@ -46,11 +78,7 @@ $(document).ready(function() {
   }
 
   $("#buscar").on("click", function () {
-    if (active === false) {
-      filter({'personalizado':active})
-    } else if(active === true) {
-      filter({'personalizado':active})
-    }
+    filter()
   })
 
 })
