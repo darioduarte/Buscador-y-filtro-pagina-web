@@ -3,9 +3,8 @@ var router = express.Router();
 var path = require('path');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  //res.render('index', { title: 'Express' });
-  res.sendFile(path.join(__dirname,'..','/views/index.html'));
+router.get('/hola', function(req, res, next) {
+  console.log(req.query);
 });
 
 module.exports = router;
