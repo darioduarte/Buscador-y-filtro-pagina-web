@@ -1,6 +1,5 @@
 $(document).ready(function() {
 
-  var form_data = new FormData();
 
   //Inicializador del elemento Slider
   $("#rangoPrecio").ionRangeSlider({
@@ -29,13 +28,15 @@ $(document).ready(function() {
   })
 
   //Request
-  var filter = function () {
+  var filter = function (custom) {
     $.ajax({
       url: '/hola',
-      data: {personalizada:active},
+      data: custom,
       type: 'POST',
       success: function(data){
+
         for (var i = 0; i < data.length; i++) {
+          console.log(data[i].Ciudad);
           $('.lista').append(
             `<div class="card horizontal">
               <div class="card-image">
@@ -78,7 +79,7 @@ $(document).ready(function() {
   }
 
   $("#buscar").on("click", function () {
-    filter()
+    filter({personalizada:active})
   })
 
 })
