@@ -18,7 +18,7 @@ router.post('/realState', function(req, res, next) {
     } else if (custom.personalizada === 'true') {//Con filtro
       var customFilter = filter;
 
-      //filtar ciudad
+      //filtro de  ciudad
       if (custom.ciudad !== '') {
         for (var i = 0; i < customFilter.length; i++) {
           if (customFilter[i].Ciudad !== custom.ciudad) {
@@ -28,6 +28,7 @@ router.post('/realState', function(req, res, next) {
         }
       }
 
+      //filtro de tipo
       if (custom.tipo !== '') {
         for (var i = 0; i < customFilter.length; i++) {
           if (customFilter[i].Tipo !== custom.tipo) {
@@ -37,18 +38,17 @@ router.post('/realState', function(req, res, next) {
         }
       }
 
-
-        for (var i = 0; i < customFilter.length; i++) {
+      //Filtro de precios
+      for (var i = 0; i < customFilter.length; i++) {
           let precio = parseInt(customFilter[i].Precio.replace('$','').replace(',',''))
-          console.log(precio, minimo);
+
           if (precio < minimo || precio > maximo) {
             customFilter.splice(i, 1);
             i--;
           }
         }
 
-      //console.log(maximo);
-      //console.log(customFilter);
+
       res.send(customFilter);
     }
 
