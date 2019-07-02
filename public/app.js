@@ -23,20 +23,41 @@ $(document).ready(function() {
       } else {
         active = true;
         this.customSearch = false;
+        filter(active)
+        $('#ciudad, #tipo').show();
       }
       $('#personalizada').toggleClass('invisible')
   })
 
-  //Request
   var filter = function (custom) {
     $.ajax({
-      url: '/hola',
+      url: '/filter',
+      data: {customizable:custom},
+      type: 'POST',
+      success: function (data) {
+        for (var i = 0; i < data.ciudades.length; i++) {
+          $('#ciudad').append(`<option value="${data.ciudades[i]}">${data.ciudades[i]}</option>`)
+        }
+
+        for (var i = 0; i < data.tipo.length; i++) {
+          $('#tipo').append(`<option value="${data.tipo[i]}">${data.tipo[i]}</option>`)
+        }
+      },
+      error: function () {
+        console.log("Error al enviar los datos");
+      }
+    })
+  }
+
+  //Request real state
+  var realState = function (custom) {
+    $.ajax({
+      url: '/realState',
       data: custom,
       type: 'POST',
       success: function(data){
-
+        $('body > div.row > div.col.m8.lista > div').remove()
         for (var i = 0; i < data.length; i++) {
-          console.log(data[i].Ciudad);
           $('.lista').append(
             `<div class="card horizontal">
               <div class="card-image">
@@ -79,7 +100,14 @@ $(document).ready(function() {
   }
 
   $("#buscar").on("click", function () {
-    filter({personalizada:active})
+    let rango = $('#rangoPrecio').val();
+    let config = {
+      personalizada:active,
+      ciudad:$('#ciudad').val(),
+      tipo:$('#tipo').val(),
+      precio: rango
+    }
+    realState(config);
   })
 
 })
